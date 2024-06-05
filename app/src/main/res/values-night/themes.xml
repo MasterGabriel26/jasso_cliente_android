@@ -1,0 +1,23 @@
+<resources>
+
+    <style name="Theme.MOVEEventosSaltillo" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <!--        <item name="android:windowFullscreen">true</item>-->
+        <item name="colorPrimary">@color/BlueJasso</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/BlueJasso</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#314369</item>
+        <item name="colorSecondaryVariant">#314369</item>
+        <item name="colorOnSecondary">@color/BlueBack</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/BGLOGO</item>
+        <!-- Customize your theme here. -->
+    </style>
+  <!-- Base application theme. -->
+    <style name="Base.Theme.MOVEEventosSaltillo" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+</resources>

@@ -1,0 +1,115 @@
+{
+  "project_info": {
+    "project_number": "851107842246",
+    "firebase_url": "https://jassodb-4b8e4-default-rtdb.firebaseio.com",
+    "project_id": "jassodb-4b8e4",
+    "storage_bucket": "jassodb-4b8e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851107842246:android:1da93370329925327e6fc7",
+        "android_client_info": {
+          "package_name": "com.abiel.jasso"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "851107842246-4200v2euuulnq064i6jd7c4gk2vha6op.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abiel.jasso",
+            "certificate_hash": "4c38b9d47c4a0e1545cc6ed0e6f003348241132e"
+          }
+        },
+        {
+          "client_id": "851107842246-538ldn0khiovkfiejm8tomavfpb9klbd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abiel.jasso",
+            "certificate_hash": "bfdb21dd0b5fbd34c4529ce2c4a32f13363d563f"
+          }
+        },
+        {
+          "client_id": "851107842246-diehk4qasod5sn6jvl2tjmuadol09p6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abiel.jasso",
+            "certificate_hash": "558e96701c3968f4c7e53c9e7b6520718c226e72"
+          }
+        },
+        {
+          "client_id": "851107842246-ibtietm3fchlonrstchlnu8gkstjte29.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abiel.jasso",
+            "certificate_hash": "2521dc033ec427e1ea95ac84cd8ecb7143cc9580"
+          }
+        },
+        {
+          "client_id": "851107842246-gqs8lboq9nfliaefngrkadvotnf6ddki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmSEe24W6jAvPwsqNKrGka2e5kCBRg5bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "851107842246-gqs8lboq9nfliaefngrkadvotnf6ddki.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "851107842246-jngo6a77e9j65l1m7n3t1rtb6eibq0ph.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abielcompany.Jasso"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851107842246:android:379bd4718755792e7e6fc7",
+        "android_client_info": {
+          "package_name": "com.example.moveeventossaltillo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "851107842246-gqs8lboq9nfliaefngrkadvotnf6ddki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmSEe24W6jAvPwsqNKrGka2e5kCBRg5bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "851107842246-gqs8lboq9nfliaefngrkadvotnf6ddki.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "851107842246-jngo6a77e9j65l1m7n3t1rtb6eibq0ph.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abielcompany.Jasso"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
