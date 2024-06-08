@@ -26,19 +26,17 @@
         android:paddingTop="10dp"
         android:paddingRight="18dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
+        android:textColor="@color/BGLOGO"
         android:textColorHint="@color/GrayTextInput"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_backHome"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_backHome"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView253" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvInvitados"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"

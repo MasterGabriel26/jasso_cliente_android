@@ -2,9 +2,9 @@ package com.example.moveeventossaltillo.Models
 
 class InvitadosModel {
     var fechaRegistro: Long=0
-    lateinit var id: String
-    lateinit var uidCliente: String
-    lateinit var idGrupoInvitados: String
+    var id: String = ""
+    var uidCliente: String = ""
+    var idGrupoInvitados: String? = null
     var llamadas: String=""
     var nombre: String=""
     var telefono: String=""
