@@ -15,9 +15,10 @@ class MisInvitadoProvider {
         mInvitados.id = documento.id
         return documento.set(mInvitados)
     }
-    public fun getAllMyInvitados(uidCliente: String): Query {
+    public fun getAllMyInvitados(uidCliente: String, idGrupoInvitados: String?): Query {
         return mCollectionReference
             .whereEqualTo("uidCliente", uidCliente)
+            .whereEqualTo("idGrupoInvitados", idGrupoInvitados)
             .orderBy("fechaRegistro", Query.Direction.DESCENDING)
     }
     public fun getCantidadInvitadosByUser(idGrupoInvitados: String): Query {

@@ -55,10 +55,10 @@ class HomeActivity : AppCompatActivity() {
     lateinit var mInvitadoProvider: MisInvitadoProvider
     private lateinit var firestoreDb: FirebaseFirestore
     private lateinit var postAdapter: InvitadosAdapter
+    private var PERMISSION_REQUEST_CODE = 110
     private var totalPersonas: Int = 0
     var llevaNinos: Boolean = false
     private var userListener: ListenerRegistration? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +67,12 @@ class HomeActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         firestoreDb = FirebaseFirestore.getInstance()
         mInvitadoProvider = MisInvitadoProvider()
+
+
+
+
+
+
         binding.button.setOnClickListener { abrirDialogParaCrearInvitado() }
 
         uid = intent.getStringExtra("uid").toString()
@@ -100,6 +106,36 @@ class HomeActivity : AppCompatActivity() {
         mInvitadoProvider = MisInvitadoProvider()
     }
     private fun initRecyclerView(uid: String) {
+
+        var query: Query =
+            mInvitadoProvider.getAllMyInvitados(uid, idGrupoInvitados)
+        var options: FirestoreRecyclerOptions<InvitadosModel?> =
+            FirestoreRecyclerOptions.Builder<InvitadosModel>()
+                .setQuery(query, InvitadosModel::class.java).build()
+        query.addSnapshotListener { snapshots, e ->
+            if (e != null) {
+                // Manejar el error
+                return@addSnapshotListener
+            }
+
+            totalPersonas = 0 // Reiniciar el total de personas
+            for (doc in snapshots!!) {
+
+                val invitado = doc.toObject(InvitadosModel::class.java)
+                totalPersonas += invitado.personas.toIntOrNull() ?: 0
+            }
+            // Actualizar el TextView con el total de personas.
+
+        }
+
+        val mAdapterMisInvitados = InvitadosAdapter(options, this)
+        binding.rvInvitados.layoutManager = LinearLayoutManager(this)
+        binding.rvInvitados.adapter = mAdapterMisInvitados
+        mAdapterMisInvitados.startListening()
+        mAdapterMisInvitados.notifyDataSetChanged()
+
+    }
+   /* private fun initRecyclerView(uid: String) {
         var query: Query = mInvitadoProvider.getAllMyInvitados(uid)
         var options: FirestoreRecyclerOptions<InvitadosModel?> =
             FirestoreRecyclerOptions.Builder<InvitadosModel>()
@@ -119,7 +155,7 @@ class HomeActivity : AppCompatActivity() {
         binding.rvInvitados.adapter = mAdapterMisInvitados
         mAdapterMisInvitados.startListening()
         mAdapterMisInvitados.notifyDataSetChanged()
-    }
+    }*/
 
     private fun abrirDialogParaCrearInvitado() {
         val dialog = Dialog(this)
@@ -154,7 +190,7 @@ class HomeActivity : AppCompatActivity() {
             mInvitados.telefono = "${lada.text}${telefono.text}"
             mInvitados.personas = adultos.text.toString().trim()
             mInvitados.niños_cantidad = niños.text.toString().trim()
-            mInvitados.idGrupoInvitados = ""
+            mInvitados.idGrupoInvitados = idGrupoInvitados
             mInvitados.fechaRegistro = Date().time
             mInvitados.uidCliente = mAuth.uid.toString()
             mInvitados.status = Constantes.StatusInvitados.PENDIENTE_EN_CONFIRMAR
@@ -162,7 +198,7 @@ class HomeActivity : AppCompatActivity() {
             if (mInvitados.nombre.isNotEmpty() && mInvitados.telefono.isNotEmpty() && mInvitados.personas.isNotEmpty()) {
                 mInvitadoProvider.crearInvitados(mInvitados).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Toast.makeText(this, "1", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Invitado creado", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, "2", Toast.LENGTH_SHORT).show()
                     }
@@ -175,6 +211,24 @@ class HomeActivity : AppCompatActivity() {
 
         dialog.show()
     }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // El permiso fue concedido, realizar la llamada
+
+                Log.d("pidiendoPermisos", "->concedido")
+            } else {
+                // El permiso fue denegado, manejar la negación
+                Toast.makeText(this, "Permiso de llamada necesario", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 
 }
