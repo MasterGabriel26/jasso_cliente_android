@@ -25,10 +25,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moveeventossaltillo.Adapters.AdapterMisPublicaionesProveedor
 import com.example.moveeventossaltillo.Adapters.InvitadosAdapter
 import com.example.moveeventossaltillo.Models.InvitadosModel
 import com.example.moveeventossaltillo.Models.InvitadosRegistroLlamadas
+import com.example.moveeventossaltillo.Models.Publicaciones
 import com.example.moveeventossaltillo.Provider.MisInvitadoProvider
+import com.example.moveeventossaltillo.Provider.PublicacionesProvider
 import com.example.moveeventossaltillo.Provider.RegistroLlamadasInvitadosProvider
 import com.example.moveeventossaltillo.databinding.ActivityHomeBinding
 import com.example.moveeventossaltillo.utils.Constantes
@@ -48,17 +51,27 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     var uid = ""
     private var idGrupoInvitados = ""
-    var mInvitadosRegistroLlamadas= InvitadosRegistroLlamadas()
-    private  var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    var mInvitadosRegistroLlamadas = InvitadosRegistroLlamadas()
+    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val listInivtados: MutableList<InvitadosModel> = mutableListOf()
     lateinit var mInvitadoProvider: MisInvitadoProvider
     private lateinit var firestoreDb: FirebaseFirestore
+
     private lateinit var postAdapter: InvitadosAdapter
     private var PERMISSION_REQUEST_CODE = 110
     private var totalPersonas: Int = 0
     var llevaNinos: Boolean = false
     private var userListener: ListenerRegistration? = null
+
+
+//    private lateinit var postAdapter: InvitadosAdapter
+//     private var totalPersonas: Int = 0
+//     var llevaNinos: Boolean = false
+//     private var userListener: ListenerRegistration? = null
+//     private lateinit var mPublicacionesProvider: PublicacionesProvider
+//     lateinit var mlinearLayoutManager: LinearLayoutManager
+//     private lateinit var postAdapter: AdapterMisPublicaionesProveedor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,27 +97,27 @@ class HomeActivity : AppCompatActivity() {
 //        } else {
 //            binding.btnAgregarInvitado.visibility = View.GONE
 //        }
-        val currentUser = mAuth.currentUser
-        val uid = currentUser?.uid
-
-        if (uid != null) {
-            val userRef = firestore.collection("usuarios").document(uid)
-            userListener =
-                userRef.addSnapshotListener { snapshot: DocumentSnapshot?, error: FirebaseFirestoreException? ->
-                    if (error != null) return@addSnapshotListener
-                    if (snapshot != null && snapshot.exists()) {
-                        val uid = snapshot.getString("uid")
-                        val usertype = snapshot.getString("userType")
-                        if (!uid.isNullOrBlank()) {
-                            initRecyclerView(uid)
-                        }
-                    }
-                }
-        }
-
+//        val currentUser = mAuth.currentUser
+//        val uid = currentUser?.uid
+//
+//        if (uid != null) {
+//            val userRef = firestore.collection("usuarios").document(uid)
+//            userListener =
+//                userRef.addSnapshotListener { snapshot: DocumentSnapshot?, error: FirebaseFirestoreException? ->
+//                    if (error != null) return@addSnapshotListener
+//                    if (snapshot != null && snapshot.exists()) {
+//                        val uid = snapshot.getString("uid")
+//                        if (!uid.isNullOrBlank()) {
+//                            initRecyclerView(uid)
+//                        }
+//                    }
+//                }
+//        }
+        initRecyclerViewPaquetes()
 //        initRecyclerView("PrIPd2MOifXRE7rG1OztFUVhinE2")
         mInvitadoProvider = MisInvitadoProvider()
     }
+
     private fun initRecyclerView(uid: String) {
 
         var query: Query =
@@ -157,6 +170,52 @@ class HomeActivity : AppCompatActivity() {
         mAdapterMisInvitados.notifyDataSetChanged()
     }*/
 
+
+//     private fun initRecyclerViewPaquetes() {
+// //        binding.progressBar.visibility = View.VISIBLE
+//         mPublicacionesProvider = PublicacionesProvider()
+//         mlinearLayoutManager = LinearLayoutManager(this)
+//         binding.rvInvitados.layoutManager = this.mlinearLayoutManager
+
+//         var query: Query = mPublicacionesProvider.getAllPosts()
+//         val options: FirestoreRecyclerOptions<Publicaciones?> = FirestoreRecyclerOptions
+//             .Builder<Publicaciones>()
+//             .setQuery(query, Publicaciones::class.java)
+//             .build()
+
+//         postAdapter = AdapterMisPublicaionesProveedor(options, this)
+//         binding.rvInvitados.adapter = this.postAdapter
+
+//         postAdapter.startListening()
+//         postAdapter.notifyDataSetChanged()
+// //        binding.progressBar.visibility = View.GONE
+
+
+//     }
+
+
+//    private fun initRecyclerView(uid: String) {
+//        var query: Query = mInvitadoProvider.getAllMyInvitados(uid)
+//        var options: FirestoreRecyclerOptions<InvitadosModel?> =
+//            FirestoreRecyclerOptions.Builder<InvitadosModel>()
+//                .setQuery(query, InvitadosModel::class.java).build()
+//
+//        query.addSnapshotListener { snapshots, e ->
+//            if (e != null) return@addSnapshotListener
+//            totalPersonas = 0 // Reiniciar el total de personas
+//            for (doc in snapshots!!) {
+//                val invitado = doc.toObject(InvitadosModel::class.java)
+//                totalPersonas += invitado.personas.toIntOrNull() ?: 0
+//            }
+//        }
+//
+//        val mAdapterMisInvitados = InvitadosAdapter(options, this)
+//        binding.rvInvitados.layoutManager = LinearLayoutManager(this)
+//        binding.rvInvitados.adapter = mAdapterMisInvitados
+//        mAdapterMisInvitados.startListening()
+//        mAdapterMisInvitados.notifyDataSetChanged()
+//    }
+
     private fun abrirDialogParaCrearInvitado() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -204,7 +263,8 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Por favor, llena todos los campos.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Por favor, llena todos los campos.", Toast.LENGTH_SHORT)
+                    .show()
             }
             dialog.dismiss()
         }
