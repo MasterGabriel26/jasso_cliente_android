@@ -13,6 +13,9 @@
         android:theme="@style/Theme.MOVEEventosSaltillo"
         tools:targetApi="31">
         <activity
+            android:name=".GruposInvitadosActivity"
+            android:exported="false" />
+        <activity
             android:name=".CrearInvitadosActivity"
             android:exported="false" />
         <activity

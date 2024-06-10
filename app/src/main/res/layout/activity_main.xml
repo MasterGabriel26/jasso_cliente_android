@@ -24,6 +24,7 @@
         android:ems="10"
         android:hint="Escribe aqui tu correo"
         android:inputType="text"
+        android:text="gabogs333@gmail.com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -33,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Escribe contraseña"
+        android:text="abieldev."
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/et_Email"
         app:layout_constraintStart_toStartOf="@+id/textView2"
@@ -78,10 +79,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tvValidationCorreoLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,5 +97,5 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/et_Password"
-        app:layout_constraintEnd_toEndOf="@+id/et_Password" />
+        app:layout_constraintEnd_toEndOf="@+id/et_Password" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

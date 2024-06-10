@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardProgressDialog"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout6"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/urbanist_semibold"
+        android:hint="Nombre del evento"
+        android:minHeight="60dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/textView227"
+        app:layout_constraintStart_toStartOf="@+id/textView227"
+        app:layout_constraintTop_toBottomOf="@+id/textView227">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/urbanist_semibold"
+            android:textColor="@color/BlueJasso" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+    <TextView
+        android:id="@+id/textView227"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/extrabold"
+        android:gravity="center"
+        android:text="Agrega un nuevo grupo"
+        android:textColor="@color/BlueJasso"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_spinner_outline"
+        android:calendarViewShown="false"
+        android:datePickerMode="calendar"
+        android:dateTextAppearance="@style/CalenderViewDateCustomText"
+        android:maxDate="12/31/2025"
+        android:minDate="01/01/2024"
+        android:spinnersShown="false"
+        app:layout_constraintEnd_toEndOf="@+id/sr_pagina"
+        app:layout_constraintStart_toStartOf="@+id/sr_pagina"
+        app:layout_constraintTop_toBottomOf="@+id/sr_pagina" />
+
+    <Spinner
+        android:id="@+id/sr_pagina"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_spinner_outline"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Agregar"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

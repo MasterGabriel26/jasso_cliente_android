@@ -97,7 +97,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_weight="1"
                     android:text="0"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/BGLOGO2" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
