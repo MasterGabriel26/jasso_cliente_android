@@ -25,25 +25,26 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
-if (auth.currentUser!=null){
-    startActivity(Intent(this, GruposInvitadosActivity::class.java))
-    finish()
-}
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, HomeNavigationActivity::class.java))
+            finish()
+        }
 
         binding.btnLogin.setOnClickListener {
             val emailText = binding.etEmail.text.toString().trim()
             val passwordText = binding.etPassword.text.toString().trim()
 
             if (emailText.isNotEmpty() && passwordText.isNotEmpty()) {
-                auth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        startActivity(Intent(this, GruposInvitadosActivity::class.java))
+                auth.signInWithEmailAndPassword(emailText, passwordText)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            startActivity(Intent(this, HomeNavigationActivity::class.java))
 //                        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                        // Navega al siguiente pantalla o cierra esta actividad
-                    } else {
+                            // Navega al siguiente pantalla o cierra esta actividad
+                        } else {
 //                        Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                        }
                     }
-                }
             } else {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }

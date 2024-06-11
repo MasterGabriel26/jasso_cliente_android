@@ -18,7 +18,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser!=null){
-            startActivity(Intent(this, GruposInvitadosActivity::class.java))
+            startActivity(Intent(this, HomeNavigationActivity::class.java))
             finish()
         }
         binding.btnContinuar.setOnClickListener {

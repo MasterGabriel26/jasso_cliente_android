@@ -1,14 +1,8 @@
 package com.example.moveeventossaltillo.Adapters
 
 import android.content.Context
-import android.content.Intent
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -29,6 +23,7 @@ import com.example.moveeventossaltillo.Provider.LikeProvider
 import com.example.moveeventossaltillo.Provider.PublicacionesProvider
 import com.example.moveeventossaltillo.Provider.UsuariosProvider
 import com.example.moveeventossaltillo.R
+import com.example.moveeventossaltillo.ui.home.HomeFragment
 import com.example.moveeventossaltillo.utils.RelativeTime
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -41,7 +36,7 @@ import java.util.Locale
 
 class AdapterMisPublicaionesProveedor(
     options: FirestoreRecyclerOptions<Publicaciones?>?,
-    var context: Context?
+    var context: Context
 ) : FirestoreRecyclerAdapter<Publicaciones, AdapterMisPublicaionesProveedor.ViewHolder>(options!!) {
 
     //    private lateinit var proveedorPostList: ArrayList<Publicaciones>

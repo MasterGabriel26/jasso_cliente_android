@@ -1,6 +1,7 @@
 package com.example.moveeventossaltillo
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -31,7 +32,7 @@ import com.google.firebase.firestore.Query
 import java.util.Calendar
 import java.util.Date
 
-    class GruposInvitadosActivity : AppCompatActivity() {
+class GruposInvitadosActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGruposInvitadosBinding
     lateinit var mInvitadoGrupoProvider: InvitadoGrupoProvider
     private lateinit var mAuth: FirebaseAuth
@@ -46,7 +47,7 @@ import java.util.Date
         mAuth = FirebaseAuth.getInstance()
 
         uid = intent.getStringExtra("uid").toString()
-        if (uid =="null"||uid ==null || uid =="") {
+        if (uid == "null" || uid == null || uid == "") {
             //mis grupos, soy cliente
             binding.btnAgregarGrupo.visibility = View.VISIBLE
             initRecyclerView(mAuth.uid.toString())
@@ -55,11 +56,18 @@ import java.util.Date
 //acá debo ocultar lo que no se necesita como asesor o admin...
             initRecyclerView(uid)
         }
-
+        listeners()
         binding.btnAgregarGrupo.setOnClickListener { abrirDialogParaCrearGrupo() }
 
     }
-
+    private fun listeners() {
+        binding.ichome.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+        }
+        binding.grupoInvitados.setOnClickListener {
+            startActivity(Intent(this, GruposInvitadosActivity::class.java))
+        }
+    }
     private fun abrirDialogParaCrearGrupo() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
