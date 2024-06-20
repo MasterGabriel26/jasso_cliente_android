@@ -28,5 +28,11 @@ class InvitadoGrupoProvider() {
         return mCollectionReference
 
     }
+    fun actualizarGrupo(mInvitadosGrupo: String, map: Map<String, Any>): Task<Void> {
+        return mCollectionReference.document(mInvitadosGrupo).update(map)
+    }
+    fun eliminarGrupo(mInvitadosGrupo: String): Task<Void> {
+        return mCollectionReference.document(mInvitadosGrupo).delete()
+    }
 
 }

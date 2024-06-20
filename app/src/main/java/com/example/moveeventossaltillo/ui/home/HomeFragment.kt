@@ -47,7 +47,6 @@ class HomeFragment : Fragment() {
     private lateinit var postAdapter: AdapterMisPublicaionesProveedor
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         mAuth = FirebaseAuth.getInstance()

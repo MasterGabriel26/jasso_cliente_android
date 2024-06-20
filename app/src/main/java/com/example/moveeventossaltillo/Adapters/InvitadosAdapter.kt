@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -42,21 +43,28 @@ class InvitadosAdapter(
         var binding = ItemInvitadosBinding.bind(view)
         private var provider: MisInvitadoProvider = MisInvitadoProvider()
         private lateinit var mAuth: FirebaseAuth
-        fun bind(
-            model: InvitadosModel,
-            position: Int
-        ) {
-            binding.cvEliminar.setOnClickListener {
-                mostrarDialogoConfirmacionEliminacion(itemView.context, model, position)
-            }
-
+        fun bind(model: InvitadosModel, position: Int) {
+            listeners(model, position)
+            initData(model, position)
+            validationsData(model, position)
             mAuth = FirebaseAuth.getInstance()
             val userID = mAuth.currentUser?.uid
+        }
 
+        private fun validationsData(model: InvitadosModel, position: Int) {
+            var validarCantidadDeChilds = model.niños_cantidad
+            if (validarCantidadDeChilds == "" || validarCantidadDeChilds == "0"){
+                binding.cvChilds.visibility = View.GONE
+            }else{
+                binding.cvChilds.visibility = View.VISIBLE
+                binding.tvCantidadNiOs.text = model.niños_cantidad
+            }
+        }
+
+        private fun initData(model: InvitadosModel, position: Int) {
             binding.tvNombre.text = model.nombre
             binding.tvTelefono.text = model.telefono
             binding.tvCantidadAdultos.text = model.personas
-            binding.tvCantidadNiOs.text = model.niños_cantidad
             binding.textView12.text = when (model.status) {
                 Constantes.StatusInvitados.PENDIENTE_EN_CONFIRMAR -> {
                     binding.cardView.setCardBackgroundColor(Color.GRAY)
@@ -83,6 +91,16 @@ class InvitadosAdapter(
                 }
             }
         }
+
+        private fun listeners(model: InvitadosModel, position: Int) {
+            binding.cvEliminar.setOnClickListener {
+                mostrarDialogoConfirmacionEliminacion(itemView.context, model, position)
+            }
+            binding.cvEditar.setOnClickListener {
+                abrirDialogParaEditar(itemView.context, model, position)
+            }
+        }
+
         private fun mostrarDialogoConfirmacionEliminacion(context: Context, model: InvitadosModel, position: Int) {
             val dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -109,6 +127,7 @@ class InvitadosAdapter(
             }
             dialog.show()
         }
+
         private fun abrirDialogParaEditar(context: Context, model: InvitadosModel, position: Int) {
             val userId = FirebaseAuth.getInstance().currentUser?.uid
             if (userId == null) {
@@ -122,63 +141,80 @@ class InvitadosAdapter(
             dialog.setContentView(R.layout.dialog_agregar_invitado)
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            val btnCancel = dialog.findViewById<TextView>(R.id.btn_dialogCancelarDelete)
-            val btnDelete = dialog.findViewById<TextView>(R.id.btn_dialogConfirmDelete)
-            val title = dialog.findViewById<TextView>(R.id.tv_dialogOutTitle)
-            val description = dialog.findViewById<TextView>(R.id.tv_dialogOutDescription)
-//            val nombreEditText = dialog.findViewById<TextInputEditText>(R.id.nombre)
-//            val telefonoEditText = dialog.findViewById<TextInputEditText>(R.id.telefono)
-//            val personasEditText = dialog.findViewById<TextInputEditText>(R.id.personas)
-//            val observacion = dialog.findViewById<TextInputEditText>(R.id.observacion)
-//            val checkBoxChilds = dialog.findViewById<CheckBox>(R.id.cb_childs)
-//            val ladaTelefono = dialog.findViewById<CountryCodePicker>(R.id.ccp)
-//            val btnAgregar = dialog.findViewById<Button>(R.id.button4)
+            val nombre = dialog.findViewById<EditText>(R.id.et_NombreInvitado)
+            val telefono = dialog.findViewById<EditText>(R.id.et_TelefonoInvitado)
+            val lada = dialog.findViewById<EditText>(R.id.et_Lada)
+            val adultos = dialog.findViewById<EditText>(R.id.et_Adultos)
+            val niños = dialog.findViewById<EditText>(R.id.et_Niños)
+            val si = dialog.findViewById<CheckBox>(R.id.cb_Si)
+            val no = dialog.findViewById<CheckBox>(R.id.cb_No)
+            val btnEditar = dialog.findViewById<TextView>(R.id.invitar)
+            val titulo = dialog.findViewById<TextView>(R.id.textView4)
+            titulo.text = "Edita tu invitado"
 
-//            titulo.text = "Edita tu invitado"
-//            nombreEditText.setText(model.nombre)
-//            val telefonodb = model.telefono
-//            telefonoEditText.setText(telefonodb?.substring(3))
-//            personasEditText.setText(model.personas)
-//            observacion.setText(model.observacion)
-//            checkBoxChilds.isChecked = model.child
+            nombre.setText(model.nombre)
+            val telefonodb = model.telefono
+            telefono.setText(telefonodb.substring(3))
+            adultos.setText(model.personas)
+            niños.setText(model.niños_cantidad)
 
-//            btnAgregar.setOnClickListener {
-//                val nombre = nombreEditText.text.toString().trim()
-//                val telefono = telefonoEditText.text.toString().trim()
-//                val personas = personasEditText.text.toString().trim()
-//                val telefonConLada = "+${ladaTelefono.selectedCountryCode}${telefono}"
-//                val observacion = model.observacion
-//                val isChildChecked = checkBoxChilds.isChecked
-//                if (nombre.isNotEmpty() && telefono.isNotEmpty() && personas.isNotEmpty()) {
-//                    val nuevoInvitadoMap = hashMapOf(
-//                        "nombre" to nombre,
-//                        "telefono" to telefonConLada,
-//                        "personas" to personas,
-//                        "observacion" to observacion,
-//                        "child" to isChildChecked
-//                    )
-//
-//                    val invitadoRef = FirebaseFirestore.getInstance().collection("invitados").document(userId)
-//                        .collection("misInvitados").document(model.id!!)
-//                    provider.actualizarInvitado(model.id!!, nuevoInvitadoMap)
-//                        .addOnSuccessListener {
-//                            Toast.makeText(context, "Datos actualizados correctamente.", Toast.LENGTH_SHORT).show()
-//                            dialog.dismiss()
-////                            notifyItemChanged(position)
-//                        }
-//                        .addOnFailureListener { e ->
-//                            Toast.makeText(context, "Error al actualizar los datos: ${e.message}", Toast.LENGTH_SHORT).show()
-//                            dialog.dismiss()
-//                        }
-//
-//                } else {
-//                    Toast.makeText(
-//                        itemView.context,
-//                        "Por favor, llena todos los campos.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
+            if (model.child) {
+                si.isChecked = true
+                no.isChecked = false
+                niños.visibility = View.VISIBLE
+            } else {
+                si.isChecked = false
+                no.isChecked = true
+                niños.visibility = View.GONE
+            }
+
+            si.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    no.isChecked = false
+                    niños.visibility = View.VISIBLE
+                }
+            }
+
+            no.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) si.isChecked = false
+                niños.visibility = View.GONE
+            }
+
+            btnEditar.setOnClickListener {
+                val nombre = nombre.text.toString().trim()
+                val telefonoFinal = "${lada.text}${telefono.text}"
+                val personas = adultos.text.toString().trim()
+                val niñosText = if (si.isChecked) niños.text.toString().trim() else "0"
+                val isChildChecked = si.isChecked
+                if (nombre.isNotEmpty() && telefonoFinal.isNotEmpty() && personas.isNotEmpty()) {
+                    val nuevoInvitadoMap = hashMapOf(
+                        "nombre" to nombre,
+                        "telefono" to telefonoFinal,
+                        "personas" to personas,
+                        "niños_cantidad" to niñosText,
+                        "child" to isChildChecked
+                    )
+                    val invitadoRef = FirebaseFirestore.getInstance().collection("invitados").document(userId)
+                        .collection("misInvitados").document(model.id)
+                    provider.actualizarInvitado(model.id, nuevoInvitadoMap)
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Datos actualizados correctamente.", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
+//                            notifyItemChanged(position)
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(context, "Error al actualizar los datos: ${e.message}", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
+                        }
+
+                } else {
+                    Toast.makeText(
+                        itemView.context,
+                        "Por favor, llena todos los campos.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
             dialog.show()
         }
 

@@ -1,4 +1,4 @@
-package com.example.moveeventossaltillo
+package com.example.moveeventossaltillo.ui.dashboard
 
 import android.app.Dialog
 import android.content.Intent
@@ -6,46 +6,65 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
-import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moveeventossaltillo.Adapters.AdapterMisInvitadosGrupo
+import com.example.moveeventossaltillo.Adapters.AdapterMisPublicaionesProveedor
 import com.example.moveeventossaltillo.Models.InvitadosGrupo
+import com.example.moveeventossaltillo.Models.InvitadosModel
+import com.example.moveeventossaltillo.Models.InvitadosRegistroLlamadas
 import com.example.moveeventossaltillo.Provider.InvitadoGrupoProvider
 import com.example.moveeventossaltillo.Provider.LugaresProvider
+import com.example.moveeventossaltillo.Provider.MisInvitadoProvider
+import com.example.moveeventossaltillo.Provider.PublicacionesProvider
+import com.example.moveeventossaltillo.R
 import com.example.moveeventossaltillo.databinding.ActivityGruposInvitadosBinding
+import com.example.moveeventossaltillo.databinding.ActivityHomeBinding
+import com.example.moveeventossaltillo.databinding.FragmentDashboardBinding
 import com.example.moveeventossaltillo.utils.CustomArrayAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import java.util.Calendar
 import java.util.Date
 
-class GruposInvitadosActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityGruposInvitadosBinding
+class GruposDeInvitadosFragment : Fragment() {
+
+    private var _binding: FragmentDashboardBinding? = null
     lateinit var mInvitadoGrupoProvider: InvitadoGrupoProvider
     private lateinit var mAuth: FirebaseAuth
     private var selectedDate: Calendar? = null
     var uid = ""
     var proveedor = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityGruposInvitadosBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        val root: View = binding.root
         mInvitadoGrupoProvider = InvitadoGrupoProvider()
         mAuth = FirebaseAuth.getInstance()
-
+        val intent = Intent()
         uid = intent.getStringExtra("uid").toString()
         if (uid == "null" || uid == null || uid == "") {
             //mis grupos, soy cliente
@@ -56,20 +75,12 @@ class GruposInvitadosActivity : AppCompatActivity() {
 //acá debo ocultar lo que no se necesita como asesor o admin...
             initRecyclerView(uid)
         }
-        listeners()
+
         binding.btnAgregarGrupo.setOnClickListener { abrirDialogParaCrearGrupo() }
-
+        return root
     }
-
-    private fun listeners() {
-        binding.ichome.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
-        }
-
-    }
-
     private fun abrirDialogParaCrearGrupo() {
-        val dialog = Dialog(this)
+        val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_agregar_grupo_invitado)
@@ -94,29 +105,18 @@ class GruposInvitadosActivity : AppCompatActivity() {
             mInvitadosGrupo.uid = mAuth.uid.toString()
             mInvitadosGrupo.proveedor = proveedor
             mInvitadosGrupo.fechaEvento = selectedDate?.timeInMillis ?: 0
-            val nombre = nombreEditText.text.toString().trim()
-            val proveedorSeleccionado = sr_pagina.selectedItem.toString()
-            val fechaEventoSeleccionada = selectedDate?.timeInMillis ?: 0
 
-            if (nombre.isEmpty()) {
-                nombreEditText.error = "El nombre es obligatorio"
-            } else if (proveedorSeleccionado.isEmpty() || proveedorSeleccionado == "Lugar de promoción") {
-                Toast.makeText(this, "Selecciona un proveedor", Toast.LENGTH_SHORT).show()
-            } else if (fechaEventoSeleccionada == 0L) {
-                Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT).show()
-            } else {
-                if (mInvitadosGrupo.nombre.isNotEmpty() && mInvitadosGrupo.proveedor.isNotEmpty()) {
-                    mInvitadoGrupoProvider.crearGrupo(mInvitadosGrupo).addOnCompleteListener {
-                        if (it.isSuccessful) {
+            if (mInvitadosGrupo.nombre.isNotEmpty() && mInvitadosGrupo.proveedor.isNotEmpty()) {
+                mInvitadoGrupoProvider.crearGrupo(mInvitadosGrupo).addOnCompleteListener {
+                    if (it.isSuccessful) {
 
-                        } else {
+                    } else {
 
-                        }
                     }
-                } else {
-                    Toast.makeText(this, "Por favorAgrega el nombre del grupo.", Toast.LENGTH_SHORT)
-                        .show()
                 }
+            } else {
+                Toast.makeText(requireContext(), "Por favorAgrega el nombre del grupo.", Toast.LENGTH_SHORT)
+                    .show()
             }
             dialog.dismiss()
         }
@@ -143,7 +143,7 @@ class GruposInvitadosActivity : AppCompatActivity() {
                 val datosLugarArray = datosLugar.toTypedArray()
                 // Crear el ArrayAdapter con el Array
                 val adapter =
-                    CustomArrayAdapter(this, android.R.layout.simple_spinner_item, datosLugarArray)
+                    CustomArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, datosLugarArray)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 // Establecer el adaptador en el Spinner
                 sr_pagina.adapter = adapter
@@ -179,11 +179,15 @@ class GruposInvitadosActivity : AppCompatActivity() {
         var options: FirestoreRecyclerOptions<InvitadosGrupo?> =
             FirestoreRecyclerOptions.Builder<InvitadosGrupo>()
                 .setQuery(query, InvitadosGrupo::class.java).build()
-        binding.rvGrupos.layoutManager = LinearLayoutManager(this)
-        val mAdapterMisInvitadosGrupo = AdapterMisInvitadosGrupo(options, this)
+        binding.rvGrupos.layoutManager = LinearLayoutManager(requireContext())
+        val mAdapterMisInvitadosGrupo = AdapterMisInvitadosGrupo(options, requireContext())
         binding.rvGrupos.adapter = mAdapterMisInvitadosGrupo
         mAdapterMisInvitadosGrupo.startListening()
         mAdapterMisInvitadosGrupo.notifyDataSetChanged()
 
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

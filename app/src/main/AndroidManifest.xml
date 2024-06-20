@@ -13,6 +13,9 @@
         android:theme="@style/Theme.MOVEEventosSaltillo"
         tools:targetApi="31">
         <activity
+            android:name=".InvitadosActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeNavigationActivity"
             android:exported="false"
             android:label="@string/title_activity_home_navigation" />
